@@ -8,7 +8,6 @@ import Footer from "./components/Footer/Footer";
 import LogInPopUp from "./components/LogInPopUP/LogInPopUp";
 import { StoreContext } from "./context/storeContext";
 
-
 const App = () => {
   const { showLogin, setShowLogin } = React.useContext(StoreContext);
 
