@@ -1,0 +1,22 @@
+.food-display {
+    margin-top: 30px;
+}
+
+.food-display h2 {
+    font-size: max(2vw, 24px);
+    font-weight: 600;
+}
+
+.food-display-list {
+    display: flex;
+    grid-template-columns: repeat(auro-fill, minmax(240px, 1fr));
+    margin-top: 30px;
+    gap: 30px;
+    row-gap: 50px;
+    overflow-x: scroll;
+    padding: 10px;;
+}
+
+.food-display-list::-webkit-scrollbar {
+    display: none;
+}

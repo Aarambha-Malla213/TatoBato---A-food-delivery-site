@@ -1,0 +1,103 @@
+.header {
+    display: flex;
+    height: 34vw;
+    margin: 30px auto;
+    background: none;
+    position: relative;
+    border: 4px solid tomato;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Left side: text */
+.header-contents {
+    left: -20px;
+    background: white;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1.5vw;
+    max-width: 50%;
+    width: 50%;
+    height: 100%;
+    padding-left: 6vw;
+    padding-bottom: 10%;
+    justify-content: flex-end;
+    z-index: 2;
+    animation: fadeIn 2s;
+    box-sizing: border-box;
+}
+
+/* Right side: image */
+.header-image {
+    width: 50%;
+    height: 100%;
+    background: url('/header_img.png') no-repeat center center;
+    background-size: cover;
+    /* border-left: 4px solid tomato; */
+    box-sizing: border-box;
+}
+
+.header-contents h2 .foodies {
+    color: tomato;
+}
+
+.header-contents h2 {
+    font-weight: 500;
+    color: #222;
+    font-size: max(4.5vw, 22px);
+}
+
+.header-contents p {
+    font-size: 1vw;
+    color: #222;
+}
+
+.header-contents button {
+    border: none;
+    color: #747474;
+    font-weight: 500;
+    padding: 1vw 2.3vw;
+    background-color: white;
+    font-size: max(1vw, 13px);
+    border-radius: 50px;
+}
+
+@media (max-width:1050px) {
+    .header-contents {
+        max-width: 45%;
+        width: 55%;
+    }
+    .header-image {
+        width: 55%;
+    }
+}
+
+@media (max-width:750px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+    }
+    .header-contents {
+        max-width: 100%;
+        width: 100%;
+        padding: 6vw 4vw 4vw 4vw;
+        border-right: none;
+        border-bottom: 4px solid tomato;
+        border-radius: 20px 20px 0 0;
+    }
+    .header-image {
+        width: 100%;
+        height: 40vw;
+        border-left: none;
+        border-top: none;
+        border-radius: 0 0 20px 20px;
+    }
+    .header-contents p{
+        display: none;
+    }
+    .header-contents button{
+        padding: 2vw 4vw;
+    }
+}
