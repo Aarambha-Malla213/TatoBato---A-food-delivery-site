@@ -47,7 +47,9 @@ const PlaceOrder = () => {
             </div>
           </div>
         </div>
-        <button>PROCEED TO PAYMENT</button>
+        <button onClick={() => console.log("Payment done")}>
+          PROCEED TO PAYMENT
+        </button>
       </div>
     </form>
   );

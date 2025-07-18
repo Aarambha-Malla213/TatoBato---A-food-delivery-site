@@ -11,12 +11,10 @@ const Navbar = ({ setShowLogin }) => {
 
   return (
     <div className="navbar">
-      {/* Logo */}
       <Link to="/" className="navbar-logo">
         <img src={assets.logo} alt="Logo" />
       </Link>
 
-      {/* Navigation Menu */}
       <ul className="navbar-menu">
         <Link
           to="/"
@@ -33,9 +31,9 @@ const Navbar = ({ setShowLogin }) => {
           RESTAURANTS
         </a>
         <a
-          href="#about"
-          onClick={() => setMenu("about")}
-          className={menu === "about" ? "active" : ""}
+          href="#about-us"
+          onClick={() => setMenu("about-us")}
+          className={menu === "about-us" ? "active" : ""}
         >
           ABOUT US
         </a>
@@ -48,7 +46,6 @@ const Navbar = ({ setShowLogin }) => {
         </a>
       </ul>
 
-      {/* Right Side */}
       <div className="navbar-right">
         <div className={`navbar-search-container ${showSearch ? "show" : ""}`}>
           <input
