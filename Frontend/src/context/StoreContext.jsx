@@ -9,6 +9,7 @@ import { food_list } from "../assets/assets";
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = React.useState({});
   const [showLogin, setShowLogin] = React.useState(false);
+  const [showContactUs, setShowContactUs] = React.useState(false);
 
   const addToCart = (itemId) => {
     if (!cartItems[itemId]) {
@@ -42,6 +43,8 @@ const StoreContextProvider = (props) => {
     getTotalCartAmount,
     showLogin,
     setShowLogin,
+    showContactUs,
+    setShowContactUs,
   };
   return (
     <StoreContext.Provider value={contextValue}>

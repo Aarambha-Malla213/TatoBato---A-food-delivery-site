@@ -6,14 +6,16 @@ import Cart from "./pages/Cart/Cart";
 import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Footer from "./components/Footer/Footer";
 import LogInPopUp from "./components/LogInPopUP/LogInPopUp";
-import { StoreContext } from "./context/storeContext";
+import ContactUsPopUp from "./components/ContactUsPopUp/ContactUsPopUp";
+import { StoreContext } from "./context/StoreContext";
 
 const App = () => {
-  const { showLogin, setShowLogin } = React.useContext(StoreContext);
+  const { showLogin, setShowLogin, showContactUs, setShowContactUs } = React.useContext(StoreContext);
 
   return (
     <>
       {showLogin ? <LogInPopUp setShowLogin={setShowLogin} /> : <></>}
+      {showContactUs ? <ContactUsPopUp setShowContactUs={setShowContactUs} /> : <></>}
       <Navbar setShowLogin={setShowLogin} />
       <div className="App">
         <Routes>

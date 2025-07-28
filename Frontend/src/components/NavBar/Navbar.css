@@ -165,6 +165,7 @@
     margin-right: 15px;
     padding: 10px 0;
     flex-wrap: wrap;
+    position: relative;
   }
 
   .navbar-logo img {
@@ -176,14 +177,15 @@
     width: 100%;
     flex-direction: column;
     background: white;
-    position: absolute;
-    top: 100%;
+    position: relative;
+    top: 0;
     left: 0;
     right: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 20px;
     gap: 15px;
-    z-index: 1000;
+    z-index: 2;
+    margin-top: 10px;
   }
 
   .navbar-menu a {

@@ -1,0 +1,118 @@
+.contactus-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contactus-popup-container {
+    width: max(30vw, 400px);
+    color: #808080;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease-in-out;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.contactus-popup-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: black;
+    margin-bottom: 10px;
+}
+
+.contactus-popup-title h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.contactus-popup-title span {
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+    padding: 5px;
+}
+
+.contactus-popup-title span:hover {
+    color: tomato;
+}
+
+.contactus-popup-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contactus-popup-inputs input,
+.contactus-popup-inputs textarea {
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.contactus-popup-inputs textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.contactus-popup-inputs input:focus,
+.contactus-popup-inputs textarea:focus {
+    border-color: tomato;
+    box-shadow: 0 0 5px rgba(255, 99, 71, 0.3);
+}
+
+.contactus-popup-container button {
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    background-color: tomato;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.contactus-popup-container button:hover {
+    background-color: #ff6347;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .contactus-popup-container {
+        width: 90%;
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .contactus-popup-title h2 {
+        font-size: 20px;
+    }
+}

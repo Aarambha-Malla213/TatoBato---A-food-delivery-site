@@ -81,3 +81,23 @@
     font-size: 0.9rem;
   }
 }
+
+/* Contact Us Button Styles */
+.contact-us-section {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.contact-us-btn {
+  background-color: tomato;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contact-us-btn:hover {
+  background-color: #ff6347;
+}
