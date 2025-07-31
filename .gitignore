@@ -40,3 +40,9 @@ htmlcov/
 # Django migrations (optional, sometimes you want to commit them)
 */migrations/__pycache__/
 */migrations/*.pyc
+db.sqlite3
+env/
+node_modules/
+Microsoft Visual Studio Code/
+.vscode/
+.idea/
