@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from "./components/NavBar/Navbar";
 import Home from "./pages/Home/Home";
 import Cart from "./pages/Cart/Cart";
@@ -9,6 +9,7 @@ import Footer from "./components/Footer/Footer";
 import LogInPopUp from "./components/LogInPopUP/LogInPopUp";
 import ContactUsPopUp from "./components/ContactUsPopUp/ContactUsPopUp";
 import { StoreContext } from "./context/StoreContext";
+import PrivateRoute from "./components/PrivateRoute"; 
 
 const App = () => {
   const { showLogin, setShowLogin, showContactUs, setShowContactUs } =
@@ -16,21 +17,28 @@ const App = () => {
 
   return (
     <>
-      {showLogin ? <LogInPopUp setShowLogin={setShowLogin} /> : <></>}
-      {showContactUs ? (
-        <ContactUsPopUp setShowContactUs={setShowContactUs} />
-      ) : (
-        <></>
-      )}
+      {showLogin && <LogInPopUp setShowLogin={setShowLogin} />}
+      {showContactUs && <ContactUsPopUp setShowContactUs={setShowContactUs} />}
+      
       <Navbar setShowLogin={setShowLogin} />
+      
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<LogInPopUp />} />
           <Route path="/order" element={<PlaceOrder />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
+      
       <Footer />
     </>
   );

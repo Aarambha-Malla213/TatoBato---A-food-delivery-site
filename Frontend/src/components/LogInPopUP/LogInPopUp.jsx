@@ -1,4 +1,6 @@
 import React, { useContext } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // ✅ ADDED
 import "./LogInPopUp.css";
 import { assets } from "../../assets/assets.js";
 import { StoreContext } from "../../context/StoreContext";
@@ -10,12 +12,12 @@ const LogInPopUp = ({ setShowLogin }) => {
     email: "",
     password: ""
   });
+
   const { loginUser } = useContext(StoreContext);
+  const navigate = useNavigate(); // ✅ ADDED
 
   React.useEffect(() => {
-    // Prevent scrolling
     document.body.style.overflow = "hidden";
-    // Restore scrolling when popup unmounts
     return () => {
       document.body.style.overflow = "";
     };
@@ -28,13 +30,38 @@ const LogInPopUp = ({ setShowLogin }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = {
-      name: formData.name || "Demo User",
-      email: formData.email || "demo@example.com"
-    };
-    loginUser(userData);
+    try {
+      const endpoint = currentState === "Sign Up" 
+        ? "http://localhost:8000/api/register/" 
+        : "http://localhost:8000/api/login/";
+
+      const response = await axios.post(endpoint, formData);
+      console.log("Response:", response.data);
+
+      // ✅ Set user context
+      const name = response.data.name || formData.name;
+      loginUser({ name, email: formData.email });
+
+      setShowLogin(false);
+      navigate("/profile"); // ✅ Redirect to profile page
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+
+      if (error.response) {
+        if (error.response.status === 404) {
+          alert("Oops! No user found with this email. Please sign up first.");
+        } else if (error.response.status === 401) {
+          alert("Incorrect email or password. Please try again.");
+        } else {
+          alert("Oops! Something went wrong on our side. Please try again later.");
+        }
+      } else {
+        alert("Unable to connect to the server. Please check your internet and try again.");
+      }
+    }
   };
 
   return (
@@ -42,12 +69,10 @@ const LogInPopUp = ({ setShowLogin }) => {
       <form className="login-popup-container" onSubmit={handleSubmit}>
         <div className="login-popup-title">
           <h2>{currentState}</h2>
-          <img onClick={() => setShowLogin(false)} src={assets.cross_icon} />
+          <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="close" />
         </div>
         <div className="login-popup-inputs">
-          {currentState === "Login" ? (
-            <></>
-          ) : (
+          {currentState === "Sign Up" && (
             <input 
               type="text" 
               name="name"
@@ -80,7 +105,7 @@ const LogInPopUp = ({ setShowLogin }) => {
         <div className="login-popup-state">
           <input type="checkbox" required />
           <p>
-            By continuing , I agree with the terms of use and privacy policy.
+            By continuing, I agree with the terms of use and privacy policy.
           </p>
         </div>
         {currentState === "Login" ? (

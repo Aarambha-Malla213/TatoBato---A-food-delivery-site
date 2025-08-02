@@ -29,17 +29,21 @@ def register(request):
     except Exception as e:
         print("Error:", e)  # DEBUG
         return Response({"error": str(e)}, status=500)
-
 @api_view(['POST'])
 def login(request):
     email = request.data.get('email')
-    password = request.data.get('password')
+    password = request.data.get('password')  # Assuming password = phone_no for now
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM Customers WHERE email = %s AND phone_no = %s", [email, password])
+        cursor.execute("SELECT name, email FROM Customers WHERE email = %s AND phone_no = %s", [email, password])
         user = cursor.fetchone()
 
     if user:
-        return Response({"message": "Login successful"})
+        name, email = user
+        return Response({
+            "message": "Login successful",
+            "name": name,
+            "email": email
+        })
     else:
         return Response({"error": "Invalid credentials"}, status=401)
