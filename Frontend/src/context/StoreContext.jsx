@@ -10,6 +10,8 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = React.useState({});
   const [showLogin, setShowLogin] = React.useState(false);
   const [showContactUs, setShowContactUs] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState(null);
 
   const addToCart = (itemId) => {
     if (!cartItems[itemId]) {
@@ -34,6 +36,17 @@ const StoreContextProvider = (props) => {
     return totalAmount;
   };
 
+  const loginUser = (userData) => {
+    setIsLoggedIn(true);
+    setUser(userData);
+    setShowLogin(false);
+  };
+
+  const logoutUser = () => {
+    setIsLoggedIn(false);
+    setUser(null);
+  };
+
   const contextValue = {
     food_list,
     cartItems,
@@ -45,6 +58,10 @@ const StoreContextProvider = (props) => {
     setShowLogin,
     showContactUs,
     setShowContactUs,
+    isLoggedIn,
+    user,
+    loginUser,
+    logoutUser,
   };
   return (
     <StoreContext.Provider value={contextValue}>

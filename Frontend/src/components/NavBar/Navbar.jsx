@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/assets";
 import { Link } from "react-router-dom";
-
-
+import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
   const [showSearch, setShowSearch] = useState(false);
+  const { isLoggedIn } = useContext(StoreContext);
 
   return (
     <div className="navbar">
@@ -28,7 +28,7 @@ const Navbar = ({ setShowLogin }) => {
           onClick={() => setMenu("restaurants")}
           className={menu === "restaurants" ? "active" : ""}
         >
-          RESTAURANTS
+          MENU
         </a>
         <a
           href="#about-us"
@@ -67,8 +67,17 @@ const Navbar = ({ setShowLogin }) => {
           <img src={assets.basket_icon} alt="Cart" />
           <div className="dot" />
         </Link>
-        {console.log("setShowLogin type:", typeof setShowLogin)}
-        <button onClick={() => setShowLogin(true)}>Sign In</button>
+        {isLoggedIn ? (
+          <Link 
+            to="/profile" 
+            className="profile-link"
+            onClick={() => setMenu("profile")}
+          >
+            Profile
+          </Link>
+        ) : (
+          <button onClick={() => setShowLogin(true)}>Sign In</button>
+        )}
       </div>
     </div>
   );
