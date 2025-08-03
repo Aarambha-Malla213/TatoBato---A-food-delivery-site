@@ -10,7 +10,9 @@ const LogInPopUp = ({ setShowLogin }) => {
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
+    address: "",
+    phoneNumber: ""
   });
 
   const { loginUser } = useContext(StoreContext);
@@ -42,7 +44,13 @@ const LogInPopUp = ({ setShowLogin }) => {
 
       // ✅ Set user context
       const name = response.data.name || formData.name;
-      loginUser({ name, email: formData.email });
+      const userData = {
+        name,
+        email: formData.email,
+        address: formData.address || response.data.address || "",
+        phoneNumber: formData.phoneNumber || response.data.phoneNumber || ""
+      };
+      loginUser(userData);
 
       setShowLogin(false);
       navigate("/profile"); // ✅ Redirect to profile page
@@ -73,14 +81,32 @@ const LogInPopUp = ({ setShowLogin }) => {
         </div>
         <div className="login-popup-inputs">
           {currentState === "Sign Up" && (
-            <input 
-              type="text" 
-              name="name"
-              placeholder="Your Name" 
-              value={formData.name}
-              onChange={handleInputChange}
-              required 
-            />
+            <>
+              <input 
+                type="text" 
+                name="name"
+                placeholder="Your Name" 
+                value={formData.name}
+                onChange={handleInputChange}
+                required 
+              />
+              <input 
+                type="tel" 
+                name="phoneNumber"
+                placeholder="Phone Number" 
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                required 
+              />
+              <input 
+                type="text" 
+                name="address"
+                placeholder="Your Address" 
+                value={formData.address}
+                onChange={handleInputChange}
+                required 
+              />
+            </>
           )}
           <input 
             type="email" 

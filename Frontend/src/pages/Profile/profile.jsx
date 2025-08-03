@@ -22,6 +22,12 @@ const Profile = () => {
           <div className="profile-details">
             <h2>{user?.name || 'User Name'}</h2>
             <p className="profile-email">{user?.email || 'user@example.com'}</p>
+            <p className="profile-phone">
+              <strong>Phone:</strong> {user?.phoneNumber || 'Phone not provided'}
+            </p>
+            <p className="profile-address">
+              <strong>Address:</strong> {user?.address || 'Address not provided'}
+            </p>
           </div>
         </div>
         
