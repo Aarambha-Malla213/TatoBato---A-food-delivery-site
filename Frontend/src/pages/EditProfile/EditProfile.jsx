@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import './EditProfile.css'
 import { StoreContext } from '../../context/StoreContext'
 
@@ -15,6 +16,7 @@ const EditProfile = () => {
   })
   
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
   
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -27,21 +29,40 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
     
     try {
-      // Here you would typically make an API call to update the user
-      // For now, we'll just update the context
+      console.log('Sending data to update_profile:', formData)
+      await axios.put('http://localhost:8000/api/update-profile/', formData)
+      
       if (updateUser) {
         await updateUser(formData)
       }
       
-      // Navigate back to profile page
       navigate('/profile')
     } catch (error) {
-      console.error('Error updating profile:', error)
-      alert('Failed to update profile. Please try again.')
+      console.error('Update profile error:', error.response?.data || error.message)
+      setError(error.response?.data?.error || 'Failed to update profile. Please try again.')
+      alert(error.response?.data?.error || 'Failed to update profile. Please try again.')
     } finally {
       setIsLoading(false)
+    }
+  }
+  
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
+      setIsLoading(true)
+      setError(null)
+      
+      try {
+        await axios.delete('http://localhost:8000/api/delete-profile/', { data: { email: formData.email } })
+        navigate('/login') // Redirect to login after deletion
+      } catch (error) {
+        setError(error.response?.data?.error || 'Failed to delete profile. Please try again.')
+        alert(error.response?.data?.error || 'Failed to delete profile. Please try again.')
+      } finally {
+        setIsLoading(false)
+      }
     }
   }
   
@@ -129,12 +150,13 @@ const EditProfile = () => {
             <button 
               type="button" 
               className="delete-btn"
-              onClick={() => alert('Delete functionality not implemented yet')}
+              onClick={handleDelete}
               disabled={isLoading}
             >
-              Delete Profile
+              {isLoading ? 'Deleting...' : 'Delete Profile'}
             </button>
           </div>
+          {error && <p className="error-message">{error}</p>}
         </form>
       </div>
     </div>
