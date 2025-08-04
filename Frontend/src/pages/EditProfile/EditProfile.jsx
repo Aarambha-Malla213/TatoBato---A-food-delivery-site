@@ -124,6 +124,17 @@ const EditProfile = () => {
               {isLoading ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
+          
+          <div className="delete-section">
+            <button 
+              type="button" 
+              className="delete-btn"
+              onClick={() => alert('Delete functionality not implemented yet')}
+              disabled={isLoading}
+            >
+              Delete Profile
+            </button>
+          </div>
         </form>
       </div>
     </div>

@@ -131,6 +131,39 @@
   background-color: #ccc;
 }
 
+/* Delete section */
+.delete-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f0f0f0;
+  text-align: center;
+}
+
+.delete-btn {
+  padding: 0.75rem 2rem;
+  border: 2px solid #ff4757;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  background-color: #fff;
+  color: #ff4757;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background-color: #ff4757;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .edit-profile-container {
