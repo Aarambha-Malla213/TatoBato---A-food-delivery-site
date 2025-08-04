@@ -12,19 +12,31 @@ def register(request):
         name = request.data.get('name')
         email = request.data.get('email')
         password = request.data.get('password')
+        phone_number = request.data.get('phoneNumber')
+        address = request.data.get('address')
 
-        print(f"Got: name={name}, email={email}, password={password}")  # DEBUG
+        print(f"Got: name={name}, email={email}, password={password}, phone={phone_number}, address={address}")  # DEBUG
 
         if not name or not email or not password:
-            return Response({"error": "All fields are required"}, status=400)
+            return Response({"error": "Name, email and password are required"}, status=400)
 
+        # Check if user already exists
         with connection.cursor() as cursor:
+            cursor.execute("SELECT email FROM Customers WHERE email = %s", [email])
+            if cursor.fetchone():
+                return Response({"error": "User with this email already exists"}, status=400)
+
+            # Insert new user
             cursor.execute(
-                "INSERT INTO Customers (name, email, phone_no) VALUES (%s, %s, %s)",
-                [name, email, password]
+                "INSERT INTO Customers (name, email, phone_no, address, password) VALUES (%s, %s, %s, %s, %s)",
+                [name, email, phone_number or '', address or '', password]
             )
 
-        return Response({"message": "User registered!"}, status=201)
+        return Response({
+            "message": "User registered successfully!",
+            "name": name,
+            "email": email
+        }, status=201)
 
     except Exception as e:
         print("Error:", e)  # DEBUG

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import './profile.css'
 import { StoreContext } from '../../context/StoreContext'
 
@@ -32,7 +33,7 @@ const Profile = () => {
         </div>
         
         <div className="profile-actions">
-          <button className="edit-profile-btn">Edit Profile</button>
+          <Link to="/profile/edit" className="edit-profile-btn">Edit Profile</Link>
           <button className="logout-btn" onClick={logoutUser}>Logout</button>
         </div>
         

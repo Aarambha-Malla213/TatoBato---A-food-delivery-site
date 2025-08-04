@@ -5,11 +5,12 @@ import Home from "./pages/Home/Home";
 import Cart from "./pages/Cart/Cart";
 import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Profile from "./pages/Profile/profile";
+import EditProfile from "./pages/EditProfile/EditProfile";
 import Footer from "./components/Footer/Footer";
 import LogInPopUp from "./components/LogInPopUP/LogInPopUp";
 import ContactUsPopUp from "./components/ContactUsPopUp/ContactUsPopUp";
 import { StoreContext } from "./context/StoreContext";
-import PrivateRoute from "./components/PrivateRoute"; 
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   const { showLogin, setShowLogin, showContactUs, setShowContactUs } =
@@ -33,6 +34,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/edit"
+            element={
+              <PrivateRoute>
+                <EditProfile />
               </PrivateRoute>
             }
           />

@@ -47,6 +47,11 @@ const StoreContextProvider = (props) => {
     setUser(null);
   };
 
+  const updateUser = (userData) => {
+    setUser({ ...user, ...userData });
+    return Promise.resolve(); // Return a promise for the EditProfile component
+  };
+
   const contextValue = {
     food_list,
     cartItems,
@@ -62,6 +67,7 @@ const StoreContextProvider = (props) => {
     user,
     loginUser,
     logoutUser,
+    updateUser,
   };
   return (
     <StoreContext.Provider value={contextValue}>
