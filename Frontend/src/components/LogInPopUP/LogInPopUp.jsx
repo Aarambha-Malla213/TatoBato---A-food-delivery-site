@@ -25,6 +25,18 @@ const LogInPopUp = ({ setShowLogin }) => {
     };
   }, []);
 
+  const handleClose = () => {
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      address: "",
+      phoneNumber: ""
+    });
+    setCurrentState("Login");
+    setShowLogin(false);
+  };
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -77,7 +89,7 @@ const LogInPopUp = ({ setShowLogin }) => {
       <form className="login-popup-container" onSubmit={handleSubmit}>
         <div className="login-popup-title">
           <h2>{currentState}</h2>
-          <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="close" />
+          <img onClick={handleClose} src={assets.cross_icon} alt="close" />
         </div>
         <div className="login-popup-inputs">
           {currentState === "Sign Up" && (

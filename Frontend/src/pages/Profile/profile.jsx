@@ -1,10 +1,16 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './profile.css'
 import { StoreContext } from '../../context/StoreContext'
 
 const Profile = () => {
   const { user, logoutUser } = useContext(StoreContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate('/'); // Redirect to homepage after logout
+  };
 
   return (
     <div className="profile-container">
@@ -34,7 +40,7 @@ const Profile = () => {
         
         <div className="profile-actions">
           <Link to="/profile/edit" className="edit-profile-btn">Edit Profile</Link>
-          <button className="logout-btn" onClick={logoutUser}>Logout</button>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
         
         <div className="profile-sections">

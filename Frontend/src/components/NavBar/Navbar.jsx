@@ -63,10 +63,12 @@ const Navbar = ({ setShowLogin }) => {
           onClick={() => setShowSearch((prev) => !prev)}
         />
 
-        <Link to="/cart" className="navbar-cart">
-          <img src={assets.basket_icon} alt="Cart" />
-          <div className="dot" />
-        </Link>
+        {isLoggedIn && (
+          <Link to="/cart" className="navbar-cart">
+            <img src={assets.basket_icon} alt="Cart" />
+            <div className="dot" />
+          </Link>
+        )}
         {isLoggedIn ? (
           <Link 
             to="/profile" 
