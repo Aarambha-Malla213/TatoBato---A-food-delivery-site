@@ -23,6 +23,10 @@
     display: none;
 }
 
+.menu-item {
+    position: relative;
+}
+
 .menu-item img {
     width: 7.5vw;
     min-width: 80px;
@@ -32,6 +36,7 @@
     border-radius: 8px;
     transition: 0.2s;
     object-fit: cover;
+    position: relative;
 }
 
 .menu-list p {
@@ -39,6 +44,33 @@
     color: #747474;
     font-size: max(1.4vw, 16px);
     cursor: pointer;
+    position: relative;
+}
+
+/* Simple tooltip on restaurant name hover */
+.menu-item p::after {
+    content: attr(data-location) "\A" attr(data-contact);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: pre-line;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    margin-bottom: 5px;
+    z-index: 100;
+}
+
+.menu-item p:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
 
 .menu hr {

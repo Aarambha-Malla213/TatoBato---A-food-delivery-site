@@ -1,7 +1,7 @@
 import React from 'react'
 import './Home.css'
 import Header from '../../components/Header/Header'
-import Menu from '../../components/Menu/menu'
+import Menu from '../../components/Menu/Menu'
 import FoodDisplay from '../../components/FoodDisplay/FoodDisplay'
 import AboutUs from '../../components/About Us/AboutUs'
 import '../../components/About Us/AboutUs.css'

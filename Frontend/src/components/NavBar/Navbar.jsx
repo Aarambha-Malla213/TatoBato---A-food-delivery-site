@@ -28,7 +28,7 @@ const Navbar = ({ setShowLogin }) => {
           onClick={() => setMenu("restaurants")}
           className={menu === "restaurants" ? "active" : ""}
         >
-          MENU
+          RESTAURANTS
         </a>
         <a
           href="#about-us"
