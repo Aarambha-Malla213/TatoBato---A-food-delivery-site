@@ -42,7 +42,6 @@ const Profile = () => {
     navigate('/'); // Redirect to homepage after logout
   };
 
-  // Show loading state
   if (loading) {
     return (
       <div className="profile-container">
