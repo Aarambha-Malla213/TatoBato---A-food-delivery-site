@@ -49,15 +49,17 @@ def login(request):
     password = request.data.get('password')  # Assuming password = phone_no for now
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT name, email FROM Customers WHERE email = %s AND password = %s", [email, password])
+        cursor.execute("SELECT name, email, phone_no, address FROM Customers WHERE email = %s AND password = %s", [email, password])
         user = cursor.fetchone()
 
     if user:
-        name, email = user
+        name, email, phone_no, address = user
         return Response({
             "message": "Login successful",
             "name": name,
-            "email": email
+            "email": email,
+            "phoneNumber": phone_no or '',
+            "address": address or ''
         })
     else:
         return Response({"error": "Invalid credentials"}, status=401)
@@ -102,6 +104,33 @@ def delete_profile(request):
 
         return Response({"message": "Profile deleted successfully"}, status=200)
 
+    except Exception as e:
+        print("Error:", e)
+        return Response({"error": str(e)}, status=500)
+
+@api_view(['GET'])
+def get_profile(request):
+    try:
+        email = request.GET.get('email')
+        
+        if not email:
+            return Response({"error": "Email is required"}, status=400)
+        
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT name, email, phone_no, address FROM Customers WHERE email = %s", [email])
+            user = cursor.fetchone()
+            
+        if user:
+            name, email, phone_no, address = user
+            return Response({
+                "name": name,
+                "email": email,
+                "phoneNumber": phone_no or '',
+                "address": address or ''
+            })
+        else:
+            return Response({"error": "User not found"}, status=404)
+            
     except Exception as e:
         print("Error:", e)
         return Response({"error": str(e)}, status=500)

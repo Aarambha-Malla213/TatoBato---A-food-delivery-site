@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import React from "react";
+import React, { useCallback } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const StoreContext = createContext(null);
@@ -10,8 +10,14 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = React.useState({});
   const [showLogin, setShowLogin] = React.useState(false);
   const [showContactUs, setShowContactUs] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [user, setUser] = React.useState(null);
+  
+  const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
+  const [user, setUser] = React.useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   const addToCart = (itemId) => {
     if (!cartItems[itemId]) {
@@ -40,17 +46,25 @@ const StoreContextProvider = (props) => {
     setIsLoggedIn(true);
     setUser(userData);
     setShowLogin(false);
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logoutUser = () => {
     setIsLoggedIn(false);
     setUser(null);
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
   };
 
-  const updateUser = (userData) => {
-    setUser({ ...user, ...userData });
+  const updateUser = useCallback((userData) => {
+    setUser(currentUser => {
+      const updatedUser = { ...currentUser, ...userData };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return updatedUser;
+    });
     return Promise.resolve(); // Return a promise for the EditProfile component
-  };
+  }, []);
 
   const contextValue = {
     food_list,

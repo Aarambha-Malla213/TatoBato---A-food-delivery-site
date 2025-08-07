@@ -12,7 +12,7 @@ const LogInPopUp = ({ setShowLogin }) => {
     email: "",
     password: "",
     address: "",
-    phoneNumber: ""
+    phoneNumber: "",
   });
 
   const { loginUser } = useContext(StoreContext);
@@ -31,7 +31,7 @@ const LogInPopUp = ({ setShowLogin }) => {
       email: "",
       password: "",
       address: "",
-      phoneNumber: ""
+      phoneNumber: "",
     });
     setCurrentState("Login");
     setShowLogin(false);
@@ -40,33 +40,31 @@ const LogInPopUp = ({ setShowLogin }) => {
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = currentState === "Sign Up" 
-        ? "http://localhost:8000/api/register/" 
-        : "http://localhost:8000/api/login/";
+      const endpoint =
+        currentState === "Sign Up"
+          ? "http://localhost:8000/api/register/"
+          : "http://localhost:8000/api/login/";
 
       const response = await axios.post(endpoint, formData);
       console.log("Response:", response.data);
 
-      // ✅ Set user context
-      const name = response.data.name || formData.name;
       const userData = {
-        name,
-        email: formData.email,
-        address: formData.address || response.data.address || "",
-        phoneNumber: formData.phoneNumber || response.data.phoneNumber || ""
+        name: response.data.name || formData.name,
+        email: response.data.email || formData.email,
+        address: response.data.address || formData.address || "",
+        phoneNumber: response.data.phoneNumber || formData.phoneNumber || "",
       };
       loginUser(userData);
 
       setShowLogin(false);
-      navigate("/profile"); // ✅ Redirect to profile page
-
+      navigate("/profile"); //Redirect to profile page
     } catch (error) {
       console.error("Error submitting form:", error);
 
@@ -76,10 +74,14 @@ const LogInPopUp = ({ setShowLogin }) => {
         } else if (error.response.status === 401) {
           alert("Incorrect email or password. Please try again.");
         } else {
-          alert("Oops! Something went wrong on our side. Please try again later.");
+          alert(
+            "Oops! Something went wrong on our side. Please try again later."
+          );
         }
       } else {
-        alert("Unable to connect to the server. Please check your internet and try again.");
+        alert(
+          "Unable to connect to the server. Please check your internet and try again."
+        );
       }
     }
   };
@@ -94,47 +96,47 @@ const LogInPopUp = ({ setShowLogin }) => {
         <div className="login-popup-inputs">
           {currentState === "Sign Up" && (
             <>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="name"
-                placeholder="Your Name" 
+                placeholder="Your Name"
                 value={formData.name}
                 onChange={handleInputChange}
-                required 
+                required
               />
-              <input 
-                type="tel" 
+              <input
+                type="tel"
                 name="phoneNumber"
-                placeholder="Phone Number" 
+                placeholder="Phone Number"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
-                required 
+                required
               />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="address"
-                placeholder="Your Address" 
+                placeholder="Your Address"
                 value={formData.address}
                 onChange={handleInputChange}
-                required 
+                required
               />
             </>
           )}
-          <input 
-            type="email" 
+          <input
+            type="email"
             name="email"
-            placeholder="Your Email" 
+            placeholder="Your Email"
             value={formData.email}
             onChange={handleInputChange}
-            required 
+            required
           />
-          <input 
-            type="password" 
+          <input
+            type="password"
             name="password"
-            placeholder="Your Password" 
+            placeholder="Your Password"
             value={formData.password}
             onChange={handleInputChange}
-            required 
+            required
           />
         </div>
         <button type="submit">
