@@ -158,3 +158,29 @@ def restaurants_list(request):
             "restaurant_image": r[4],
         })
     return Response(results)
+
+
+@api_view(['GET'])
+def menu_items_list(request):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT mi.item_id, r.restaurant_id, r.name as restaurant_name,
+                   mi.item_name, mi.description, mi.price
+            FROM Menu_Items mi
+            JOIN restaurants r ON mi.restaurant_id = r.restaurant_id
+            ORDER BY r.name, mi.item_name;
+        """)
+        rows = cursor.fetchall()
+    
+    results = []
+    for row in rows:
+        results.append({
+            "item_id": row[0],
+            "restaurant_id": row[1],
+            "restaurant_name": row[2],
+            "item_name": row[3],
+            "description": row[4],
+            "price": float(row[5]),
+        })
+    
+    return Response(results)

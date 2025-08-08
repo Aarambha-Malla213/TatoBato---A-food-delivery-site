@@ -64,6 +64,41 @@ export const restaurantImages = {
   "menu_8.jpg": menu_8,
 };
 
+export const foodImages = {
+  "Greek salad": food_1,
+  "Veg salad": food_2,
+  "Clover Salad": food_3,
+  "Chicken Salad": food_4,
+  "Lasagna Rolls": food_5,
+  "Peri Peri Rolls": food_6,
+  "Chicken Rolls": food_7,
+  "Veg Rolls": food_8,
+  "Ripple Ice Cream": food_9,
+  "Fruit Ice Cream": food_10,
+  "Jar Ice Cream": food_11,
+  "Vanilla Ice Cream": food_12,
+  "Chicken Sandwich": food_13,
+  "Vegan Sandwich": food_14,
+  "Grilled Sandwich": food_15,
+  "Bread Sandwich": food_16,
+  "Cup Cake": food_17,
+  "Vegan Cake": food_18,
+  "Butterscotch Cake": food_19,
+  "Sliced Cake": food_20,
+  "Garlic Mushroom": food_21,
+  "Fried Cauliflower": food_22,
+  "Mix Veg Pulao": food_23,
+  "Rice Zucchini": food_24,
+  "Cheese Pasta": food_25,
+  "Tomato Pasta": food_26,
+  "Creamy Pasta": food_27,
+  "Chicken Pasta": food_28,
+  "Butter Noodles": food_29,
+  "Veg Noodles": food_30,
+  "Somen Noodles": food_31,
+  "Cooked Noodles": food_32,
+};
+
 export const assets = {
   logo,
   search_icon,
@@ -127,6 +162,7 @@ export const restaurant_list = [
         location: "Durbar Marg",
         contact: "01-8901234"
     }]
+
 
 export const food_list = [
     {
