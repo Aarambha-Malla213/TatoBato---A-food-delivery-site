@@ -39,6 +39,16 @@
     color: white;
 }
 
+.footer-content-center a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-content-center a:hover {
+    color: #ff6b6b;
+}
+
 .footer-socials img{
     width: 40px;
     margin-right: 15px;

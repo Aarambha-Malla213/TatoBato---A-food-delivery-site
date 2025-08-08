@@ -75,7 +75,7 @@ const Navbar = ({ setShowLogin }) => {
             className="profile-link"
             onClick={() => setMenu("profile")}
           >
-            Profile
+            <img src={assets.profile_icon} alt="Profile" className="profile-icon" />
           </Link>
         ) : (
           <button onClick={() => setShowLogin(true)}>Sign In</button>

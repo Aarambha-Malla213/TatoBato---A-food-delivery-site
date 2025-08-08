@@ -96,6 +96,20 @@
   cursor: pointer;
 }
 
+/* Profile Icon */
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .navbar {
@@ -277,5 +291,10 @@
   .navbar-cart img {
     width: 20px;
     height: 20px;
+  }
+
+  .profile-icon {
+    width: 25px;
+    height: 25px;
   }
 }
