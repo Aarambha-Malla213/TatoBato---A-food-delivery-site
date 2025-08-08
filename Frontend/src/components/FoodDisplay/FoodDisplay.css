@@ -30,3 +30,12 @@
 .food-display-list::-webkit-scrollbar {
     display: none;
 }
+
+/* Mobile-only changes - vertical layout */
+@media (max-width: 768px) {
+    .food-display-list {
+        flex-direction: column;
+        overflow-x: visible;
+        gap: 20px;
+    }
+}
