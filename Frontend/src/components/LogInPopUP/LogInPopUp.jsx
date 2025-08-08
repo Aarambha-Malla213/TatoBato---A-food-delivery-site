@@ -37,6 +37,10 @@ const LogInPopUp = ({ setShowLogin }) => {
     setShowLogin(false);
   };
 
+  const handleSkip = () => {
+    setShowLogin(false);
+  };
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -159,6 +163,14 @@ const LogInPopUp = ({ setShowLogin }) => {
             <span onClick={() => setCurrentState("Login")}>Login here</span>
           </p>
         )}
+        
+        <button 
+          type="button" 
+          className="skip-button" 
+          onClick={handleSkip}
+        >
+          Skip for now
+        </button>
       </form>
     </div>
   );

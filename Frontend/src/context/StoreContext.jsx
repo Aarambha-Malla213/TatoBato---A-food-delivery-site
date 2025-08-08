@@ -8,7 +8,10 @@ import { food_list } from "../assets/assets";
 
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = React.useState({});
-  const [showLogin, setShowLogin] = React.useState(false);
+  const [showLogin, setShowLogin] = React.useState(() => {
+    // Show login popup automatically if user is not logged in
+    return localStorage.getItem('isLoggedIn') !== 'true';
+  });
   const [showContactUs, setShowContactUs] = React.useState(false);
   
   const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
