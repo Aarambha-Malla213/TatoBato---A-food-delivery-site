@@ -13,6 +13,8 @@ const StoreContextProvider = (props) => {
     return localStorage.getItem('isLoggedIn') !== 'true';
   });
   const [showContactUs, setShowContactUs] = React.useState(false);
+  const [searchResults, setSearchResults] = React.useState([]);
+  const [isSearchActive, setIsSearchActive] = React.useState(false);
   
   const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -69,6 +71,31 @@ const StoreContextProvider = (props) => {
     return Promise.resolve(); // Return a promise for the EditProfile component
   }, []);
 
+  const searchMenuItems = async (query) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      setIsSearchActive(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/search-menu-items/?q=${encodeURIComponent(query)}`);
+      if (!response.ok) throw new Error("Failed to search menu items");
+      const data = await response.json();
+      setSearchResults(data);
+      setIsSearchActive(true);
+    } catch (error) {
+      console.error("Error searching menu items:", error);
+      setSearchResults([]);
+      setIsSearchActive(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchResults([]);
+    setIsSearchActive(false);
+  };
+
   const contextValue = {
     food_list,
     cartItems,
@@ -85,6 +112,10 @@ const StoreContextProvider = (props) => {
     loginUser,
     logoutUser,
     updateUser,
+    searchResults,
+    isSearchActive,
+    searchMenuItems,
+    clearSearch,
   };
   return (
     <StoreContext.Provider value={contextValue}>

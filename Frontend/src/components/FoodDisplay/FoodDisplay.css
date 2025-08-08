@@ -7,6 +7,16 @@
     font-weight: 600;
 }
 
+.food-display-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.clear-search-btn:hover {
+    background-color: #c0392b !important;
+}
+
 .food-display-list {
     display: flex;
     grid-template-columns: repeat(auro-fill, minmax(240px, 1fr));

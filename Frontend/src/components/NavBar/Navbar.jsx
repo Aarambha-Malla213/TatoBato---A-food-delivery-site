@@ -7,7 +7,32 @@ import { StoreContext } from "../../context/StoreContext";
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
   const [showSearch, setShowSearch] = useState(false);
-  const { isLoggedIn } = useContext(StoreContext);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { isLoggedIn, searchMenuItems, clearSearch } = useContext(StoreContext);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      searchMenuItems(searchQuery.trim());
+    }
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e);
+    }
+  };
+
+  const handleSearchIconClick = () => {
+    if (showSearch && searchQuery.trim()) {
+      searchMenuItems(searchQuery.trim());
+    } else {
+      setShowSearch((prev) => !prev);
+      if (!showSearch) {
+        clearSearch();
+      }
+    }
+  };
 
   return (
     <div className="navbar">
@@ -52,6 +77,9 @@ const Navbar = ({ setShowLogin }) => {
             type="text"
             placeholder="Search for food, restaurants, etc."
             className="navbar-search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={handleSearchKeyPress}
             autoFocus={showSearch}
           />
         </div>
@@ -60,7 +88,7 @@ const Navbar = ({ setShowLogin }) => {
           src={assets.search_icon}
           alt="Search"
           className="icon-button"
-          onClick={() => setShowSearch((prev) => !prev)}
+          onClick={handleSearchIconClick}
         />
 
         {isLoggedIn && (
