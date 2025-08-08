@@ -83,11 +83,14 @@ WSGI_APPLICATION = 'tatobato.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tatobato',
-        'USER': 'postgres',
-        'PASSWORD': 'Pulsar@150_123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': 'postgres',  # Your Supabase database name
+        'USER': 'postgres.dvsxuyrmwzqknitfejqu',  # Your Supabase DB user
+        'PASSWORD': 'tatobato@123',  # Replace with your actual password
+        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host (pooler endpoint)
+        'PORT': '6543',  # Supabase port
+        'OPTIONS': {
+            'sslmode': 'require',  # Supabase requires SSL connections
+        },
     }
 }
 
