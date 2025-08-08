@@ -53,6 +53,17 @@ import food_30 from './food_30.png'
 import food_31 from './food_31.png'
 import food_32 from './food_32.png'
 
+export const restaurantImages = {
+  "menu_1.jpg": menu_1,
+  "menu_2.jpg": menu_2,
+  "menu_3.jpg": menu_3,
+  "menu_4.png": menu_4,
+  "menu_5.jpg": menu_5,
+  "menu_6.png": menu_6,
+  "menu_7.jpg": menu_7,
+  "menu_8.jpg": menu_8,
+};
+
 export const assets = {
   logo,
   search_icon,

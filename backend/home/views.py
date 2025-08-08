@@ -134,3 +134,27 @@ def get_profile(request):
     except Exception as e:
         print("Error:", e)
         return Response({"error": str(e)}, status=500)
+
+@api_view(['GET'])
+def restaurants_list(request):
+    """
+    Return all restaurants as JSON.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT restaurant_id, name, location, contact, restaurant_image
+            FROM restaurants
+            ORDER BY name;
+        """)
+        rows = cursor.fetchall()
+        # rows is a list of tuples: (id, restaurant_name, location, contact, restaurant_image)
+    results = []
+    for r in rows:
+        results.append({
+            "restaurant_id": r[0],
+            "name": r[1],
+            "location": r[2],
+            "contact": r[3],
+            "restaurant_image": r[4],
+        })
+    return Response(results)

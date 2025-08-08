@@ -7,4 +7,5 @@ urlpatterns = [
     path('get-profile/', get_profile),
     path('update-profile/', update_profile),
     path('delete-profile/', delete_profile),
+    path('restaurants/', restaurants_list, name='restaurants-list'),
 ]
