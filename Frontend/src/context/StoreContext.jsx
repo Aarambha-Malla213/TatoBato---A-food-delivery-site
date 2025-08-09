@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { foodImages } from "../assets/assets"; // Import images map
+import { API_BASE_URL } from "../config/api";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const StoreContext = createContext(null);
@@ -21,7 +22,7 @@ const StoreContextProvider = (props) => {
   useEffect(() => {
     async function fetchFoodList() {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/menu-items/");
+        const res = await fetch(`${API_BASE_URL}/api/menu-items/`);
         if (!res.ok) throw new Error("Failed to fetch menu items");
         const data = await res.json();
 
@@ -112,7 +113,7 @@ const StoreContextProvider = (props) => {
       return;
     }
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/search-menu-items/?q=${encodeURIComponent(query)}`);
+      const response = await fetch(`${API_BASE_URL}/api/search-menu-items/?q=${encodeURIComponent(query)}`);
       if (!response.ok) throw new Error("Failed to search menu items");
       const data = await response.json();
 

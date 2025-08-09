@@ -4,6 +4,7 @@ import "./FoodDisplay.css";
 import FoodItem from "../FoodItem/FoodItem.jsx";
 import { foodImages } from "../../assets/assets";
 import { StoreContext } from "../../context/StoreContext";
+import { API_BASE_URL } from "../../config/api";
 
 const FoodDisplay = ({ category }) => {
   const [foodList, setFoodList] = useState([]);
@@ -14,7 +15,7 @@ const FoodDisplay = ({ category }) => {
   useEffect(() => {
     const fetchFoodList = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/menu-items/");
+        const response = await fetch(`${API_BASE_URL}/api/menu-items/`);
         if (!response.ok) throw new Error("Failed to fetch food items");
         const data = await response.json();
         setFoodList(data);

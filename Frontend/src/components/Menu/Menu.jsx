@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Menu.css";
 import { restaurantImages } from "../../assets/assets";
+import { API_BASE_URL } from "../../config/api";
 
 const getImageKey = (filename) => {
   // convert .jpg backend names to .png where applicable
@@ -15,7 +16,7 @@ const Menu = ({ category, setCategory }) => {
   const [loading, setLoading] = useState(true);
 
  useEffect(() => {
-fetch("http://localhost:8000/api/restaurants/")
+fetch(`${API_BASE_URL}/api/restaurants/`)
     .then((res) => {
       console.log("Fetch response status:", res.status);
       return res.json();

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './EditProfile.css'
 import { StoreContext } from '../../context/StoreContext'
+import { API_BASE_URL } from '../../config/api'
 
 const EditProfile = () => {
   const { user, updateUser } = useContext(StoreContext)
@@ -33,7 +34,7 @@ const EditProfile = () => {
     
     try {
       console.log('Sending data to update_profile:', formData)
-      await axios.put('http://localhost:8000/api/update-profile/', formData)
+      await axios.put(`${API_BASE_URL}/api/update-profile/`, formData)
       
       if (updateUser) {
         await updateUser(formData)
@@ -55,7 +56,7 @@ const EditProfile = () => {
       setError(null)
       
       try {
-        await axios.delete('http://localhost:8000/api/delete-profile/', { data: { email: formData.email } })
+        await axios.delete(`${API_BASE_URL}/api/delete-profile/`, { data: { email: formData.email } })
         navigate('/login') // Redirect to login after deletion
       } catch (error) {
         setError(error.response?.data?.error || 'Failed to delete profile. Please try again.')

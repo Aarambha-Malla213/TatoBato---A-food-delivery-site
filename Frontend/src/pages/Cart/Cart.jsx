@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Cart.css";
 import { foodImages } from "../../assets/assets";
+import { API_BASE_URL } from "../../config/api";
 
 const Cart = () => {
   const {
@@ -24,7 +25,7 @@ const Cart = () => {
       if (user?.email) {
         setLoadingUser(true);
         try {
-          const response = await axios.get(`http://127.0.0.1:8000/api/get-profile/?email=${encodeURIComponent(user.email)}`);
+          const response = await axios.get(`${API_BASE_URL}/api/get-profile/?email=${encodeURIComponent(user.email)}`);
           if (response.data?.id) {
             updateUser(response.data);  // Update context user with full profile (including id)
           }
@@ -80,7 +81,7 @@ const Cart = () => {
     console.log("Order payload:", payload);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/create_order/", payload);
+      const res = await axios.post(`${API_BASE_URL}/api/create_order/`, payload);
       if (res.status === 201) {
         alert("Order placed successfully!");
         navigate("/order");

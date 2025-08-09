@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './profile.css'
 import { StoreContext } from '../../context/StoreContext'
+import { API_BASE_URL } from '../../config/api'
 
 const Profile = () => {
   const { user, logoutUser, updateUser } = useContext(StoreContext);
@@ -29,7 +30,7 @@ const Profile = () => {
         setError('');
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/get-profile/?email=${encodeURIComponent(user.email)}`
+            `${API_BASE_URL}/api/get-profile/?email=${encodeURIComponent(user.email)}`
           );
           updateUser(response.data);
         } catch (error) {
@@ -49,7 +50,7 @@ const Profile = () => {
       setOrderError('');
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/order-history/?email=${encodeURIComponent(user.email)}`
+          `${API_BASE_URL}/api/order-history/?email=${encodeURIComponent(user.email)}`
         );
         console.log("Order history response:", res.data);
         setOrderHistory(res.data);

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"; // ✅ ADDED
 import "./LogInPopUp.css";
 import { assets } from "../../assets/assets.js";
 import { StoreContext } from "../../context/StoreContext";
+import { API_BASE_URL } from "../../config/api";
 
 const LogInPopUp = ({ setShowLogin }) => {
   const [currentState, setCurrentState] = React.useState("Login");
@@ -53,8 +54,8 @@ const LogInPopUp = ({ setShowLogin }) => {
     try {
       const endpoint =
         currentState === "Sign Up"
-          ? "http://localhost:8000/api/register/"
-          : "http://localhost:8000/api/login/";
+          ? `${API_BASE_URL}/api/register/`
+          : `${API_BASE_URL}/api/login/`;
 
       const response = await axios.post(endpoint, formData);
       console.log("Response:", response.data);
