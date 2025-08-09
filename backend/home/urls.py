@@ -13,4 +13,5 @@ urlpatterns = [
     path('search-menu-items/', search_menu_items, name='search-menu-items'),
     path('add_order_details/', views.add_order_details, name='add_order_details'),
     path('create_order/', create_order, name='create_order'),
+    path('order-history/', order_history, name='order-history'),
 ]

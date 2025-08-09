@@ -557,4 +557,49 @@ def add_order_details(request):
     except Exception as e:
         print("Error:", e)
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
+
+@api_view(['GET'])
+def order_history(request):
+
+    print("Query params:", request.GET)
+    email = request.GET.get('email')
+    if not email:
+        return Response({"error": "Email is required"}, status=400)
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT o.order_id, o.total_amount, o.order_date
+            FROM Orders o
+            JOIN Customers c ON o.customer_id = c.customer_id
+            WHERE c.email = %s
+            ORDER BY o.order_date DESC
+        """, [email])
+        orders = cursor.fetchall()
+
+        result = []
+        for order in orders:
+            order_id, total_amount, order_date = order
+            cursor.execute("""
+                SELECT od.item_id, mi.item_name, od.quantity, od.price
+                FROM Order_Details od
+                JOIN Menu_Items mi ON od.item_id = mi.item_id
+                WHERE od.order_id = %s
+            """, [order_id])
+            items = cursor.fetchall()
+
+            item_list = [{
+                "item_id": item[0],
+                "item_name": item[1],
+                "quantity": item[2],
+                "price": float(item[3])
+            } for item in items]
+
+            result.append({
+                "order_id": order_id,
+                "total_amount": float(total_amount),
+                "order_date": order_date.strftime('%Y-%m-%d'),
+                "items": item_list,
+            })
+
+    return Response(result)

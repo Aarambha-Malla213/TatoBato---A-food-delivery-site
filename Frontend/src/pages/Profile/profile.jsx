@@ -7,18 +7,30 @@ import { StoreContext } from '../../context/StoreContext'
 const Profile = () => {
   const { user, logoutUser, updateUser } = useContext(StoreContext);
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState('');
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      // Only fetch if user exists and we don't have complete data yet
-      if (user?.email && (!user.address || !user.phoneNumber)) {
+    const fetchData = async () => {
+      if (!user?.email) {
+        console.warn("No email in user context yet, skipping fetch.");
+        return;
+      }
+
+      console.log("Fetching data for email:", user.email);
+
+      // Fetch profile if needed
+      if (!user.address || !user.phoneNumber) {
         setLoading(true);
         setError('');
-        
         try {
-          const response = await axios.get(`http://localhost:8000/api/get-profile/?email=${encodeURIComponent(user.email)}`);
+          const response = await axios.get(
+            `http://localhost:8000/api/get-profile/?email=${encodeURIComponent(user.email)}`
+          );
           updateUser(response.data);
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -31,15 +43,30 @@ const Profile = () => {
           setLoading(false);
         }
       }
+
+      // Fetch order history
+      setOrderLoading(true);
+      setOrderError('');
+      try {
+        const res = await axios.get(
+          `http://localhost:8000/api/order-history/?email=${encodeURIComponent(user.email)}`
+        );
+        console.log("Order history response:", res.data);
+        setOrderHistory(res.data);
+      } catch (err) {
+        console.error('Error fetching order history:', err);
+        setOrderError('Failed to load order history.');
+      } finally {
+        setOrderLoading(false);
+      }
     };
 
-    fetchUserData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.email]);
+    fetchData();
+  }, [user?.email, user?.address, user?.phoneNumber, updateUser]);
 
   const handleLogout = () => {
     logoutUser();
-    navigate('/'); // Redirect to homepage after logout
+    navigate('/');
   };
 
   if (loading) {
@@ -60,13 +87,13 @@ const Profile = () => {
       <div className="profile-header">
         <h1>My Profile</h1>
       </div>
-      
+
       {error && (
         <div className="error-message">
           <p style={{color: 'red', textAlign: 'center', margin: '10px 0'}}>{error}</p>
         </div>
       )}
-      
+
       <div className="profile-content">
         <div className="profile-info">
           <div className="profile-picture">
@@ -74,7 +101,7 @@ const Profile = () => {
               {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
           </div>
-          
+
           <div className="profile-details">
             <h2>{user?.name || 'User Name'}</h2>
             <p className="profile-email">{user?.email || 'user@example.com'}</p>
@@ -86,23 +113,45 @@ const Profile = () => {
             </p>
           </div>
         </div>
-        
+
         <div className="profile-actions">
           <Link to="/profile/edit" className="edit-profile-btn">Edit Profile</Link>
           <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
-        
+
         <div className="profile-sections">
           <div className="section">
             <h3>Order History</h3>
-            <p>No orders yet</p>
+            {orderLoading ? (
+              <p>Loading orders...</p>
+            ) : orderError ? (
+              <p style={{ color: 'red' }}>{orderError}</p>
+            ) : orderHistory.length === 0 ? (
+              <p>No orders yet</p>
+            ) : (
+              orderHistory.map(order => (
+                <div key={order.order_id} className="order-item" style={{marginBottom: '1rem'}}>
+                  <h4>
+                    Order #{order.order_id} - {new Date(order.order_date).toLocaleDateString()}
+                  </h4>
+                  <p><strong>Total:</strong> Rs {order.total_amount.toFixed(2)}</p>
+                  <ul style={{ paddingLeft: '1.25rem' }}>
+                    {order.items.map(item => (
+                      <li key={item.item_id ?? Math.random()}>
+                        {item.item_name} x {item.quantity} @ Rs {item.price.toFixed(2)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            )}
           </div>
-          
+
           <div className="section">
             <h3>Favorite Foods</h3>
             <p>No favorites yet</p>
           </div>
-          
+
           <div className="section">
             <h3>Delivery Addresses</h3>
             {user?.address ? (
@@ -117,7 +166,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;
