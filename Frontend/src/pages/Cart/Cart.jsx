@@ -9,6 +9,7 @@ import { API_BASE_URL } from "../../config/api";
 const Cart = () => {
   const {
     cartItems,
+    setCartItems,  // added to clear cart after successful order
     food_list,
     removeFromCart,
     getTotalCartAmount,
@@ -83,8 +84,11 @@ const Cart = () => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/create_order/`, payload);
       if (res.status === 201) {
-        alert("Order placed successfully!");
-        navigate("/order");
+        alert("Order placed successfully!\n\nYour order will be delivered in 30-45 minutes.");
+        // Clear the cart after successful order placement
+        setCartItems({});
+        // Navigate back to home page
+        navigate("/");
       } else {
         alert("Something went wrong while placing your order.");
       }

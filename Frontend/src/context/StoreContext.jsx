@@ -146,6 +146,7 @@ const StoreContextProvider = (props) => {
       value={{
         food_list,
         cartItems,
+        setCartItems,
         addToCart,
         removeFromCart,
         getTotalCartAmount,
