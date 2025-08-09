@@ -1,47 +1,73 @@
-import { createContext } from "react";
-import React, { useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
+import { foodImages } from "../assets/assets"; // Import images map
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const StoreContext = createContext(null);
 
-import { food_list } from "../assets/assets";
-
 const StoreContextProvider = (props) => {
-  const [cartItems, setCartItems] = React.useState({});
-  const [showLogin, setShowLogin] = React.useState(() => {
-    // Show login popup automatically if user is not logged in
-    return localStorage.getItem('isLoggedIn') !== 'true';
-  });
-  const [showContactUs, setShowContactUs] = React.useState(false);
-  const [searchResults, setSearchResults] = React.useState([]);
-  const [isSearchActive, setIsSearchActive] = React.useState(false);
-  
-  const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
-    return localStorage.getItem('isLoggedIn') === 'true';
-  });
-  const [user, setUser] = React.useState(() => {
+  const [cartItems, setCartItems] = useState({});
+  const [food_list, setFoodList] = useState([]);
+  const [showLogin, setShowLogin] = useState(() => localStorage.getItem('isLoggedIn') !== 'true');
+  const [showContactUs, setShowContactUs] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  const addToCart = (itemId) => {
-    if (!cartItems[itemId]) {
-      setCartItems((prev) => ({ ...prev, [itemId]: 1 }));
-    } else {
-      setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+  // Fetch menu items from backend and assign local images
+  useEffect(() => {
+    async function fetchFoodList() {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/menu-items/");
+        if (!res.ok) throw new Error("Failed to fetch menu items");
+        const data = await res.json();
+
+        // Map local images by matching food name
+        const foodWithImages = data.map(item => ({
+          ...item,
+          image: foodImages[item.name] || null, // fallback null if image missing
+        }));
+
+        setFoodList(foodWithImages);
+      } catch (error) {
+        console.error("Error fetching menu items:", error);
+      }
     }
+    fetchFoodList();
+  }, []);
+
+  const addToCart = (itemId) => {
+    const id = String(itemId);
+    setCartItems((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    const id = String(itemId);
+    setCartItems((prev) => {
+      if (!prev[id]) return prev;
+      const newQty = prev[id] - 1;
+      if (newQty <= 0) {
+        const newCart = { ...prev };
+        delete newCart[id];
+        return newCart;
+      }
+      return { ...prev, [id]: newQty };
+    });
   };
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        let itemInfo = food_list.find((product) => product._id === item);
-        totalAmount += itemInfo.price * cartItems[item];
+    for (const id in cartItems) {
+      const qty = cartItems[id];
+      if (qty > 0) {
+        const itemInfo = food_list.find((item) => String(item.item_id || item._id) === id);
+        if (itemInfo) totalAmount += itemInfo.price * qty;
       }
     }
     return totalAmount;
@@ -62,13 +88,21 @@ const StoreContextProvider = (props) => {
     localStorage.removeItem('user');
   };
 
+  // Updated updateUser to normalize user id from pk or _id if id not present
   const updateUser = useCallback((userData) => {
-    setUser(currentUser => {
-      const updatedUser = { ...currentUser, ...userData };
+    const normalizedUserData = { ...userData };
+
+    // Normalize ID fields from common backend user id keys
+    if (userData.pk && !userData.id) normalizedUserData.id = userData.pk;
+    else if (userData._id && !userData.id) normalizedUserData.id = userData._id;
+
+    setUser((currentUser) => {
+      const updatedUser = { ...currentUser, ...normalizedUserData };
       localStorage.setItem('user', JSON.stringify(updatedUser));
       return updatedUser;
     });
-    return Promise.resolve(); // Return a promise for the EditProfile component
+
+    return Promise.resolve();
   }, []);
 
   const searchMenuItems = async (query) => {
@@ -77,12 +111,18 @@ const StoreContextProvider = (props) => {
       setIsSearchActive(false);
       return;
     }
-
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/search-menu-items/?q=${encodeURIComponent(query)}`);
       if (!response.ok) throw new Error("Failed to search menu items");
       const data = await response.json();
-      setSearchResults(data);
+
+      // Map images for search results also
+      const resultsWithImages = data.map(item => ({
+        ...item,
+        image: foodImages[item.name] || null,
+      }));
+
+      setSearchResults(resultsWithImages);
       setIsSearchActive(true);
     } catch (error) {
       console.error("Error searching menu items:", error);
@@ -96,29 +136,29 @@ const StoreContextProvider = (props) => {
     setIsSearchActive(false);
   };
 
-  const contextValue = {
-    food_list,
-    cartItems,
-    setCartItems,
-    addToCart,
-    removeFromCart,
-    getTotalCartAmount,
-    showLogin,
-    setShowLogin,
-    showContactUs,
-    setShowContactUs,
-    isLoggedIn,
-    user,
-    loginUser,
-    logoutUser,
-    updateUser,
-    searchResults,
-    isSearchActive,
-    searchMenuItems,
-    clearSearch,
-  };
   return (
-    <StoreContext.Provider value={contextValue}>
+    <StoreContext.Provider
+      value={{
+        food_list,
+        cartItems,
+        addToCart,
+        removeFromCart,
+        getTotalCartAmount,
+        showLogin,
+        setShowLogin,
+        showContactUs,
+        setShowContactUs,
+        isLoggedIn,
+        user,
+        loginUser,
+        logoutUser,
+        updateUser,
+        searchResults,
+        isSearchActive,
+        searchMenuItems,
+        clearSearch,
+      }}
+    >
       {props.children}
     </StoreContext.Provider>
   );
