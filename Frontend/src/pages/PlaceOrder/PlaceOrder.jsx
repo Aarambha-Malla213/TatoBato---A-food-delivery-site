@@ -54,7 +54,9 @@ const PlaceOrder = () => {
           <p>Pay when your order arrives at your doorstep</p>
         </div>
         <button 
-          onClick={() => {
+          type="button"
+          onClick={(e) => {
+            e.preventDefault(); // Prevent form submission
             if (getTotalCartAmount() === 0) {
               alert('Your cart is empty!');
               return;
