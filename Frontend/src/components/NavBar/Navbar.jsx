@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = ({ setShowLogin }) => {
@@ -9,11 +9,13 @@ const Navbar = ({ setShowLogin }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { isLoggedIn, searchMenuItems, clearSearch } = useContext(StoreContext);
+  const navigate = useNavigate();
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      searchMenuItems(searchQuery.trim());
+      await searchMenuItems(searchQuery.trim());
+      navigate('/search');
     }
   };
 
@@ -23,9 +25,10 @@ const Navbar = ({ setShowLogin }) => {
     }
   };
 
-  const handleSearchIconClick = () => {
+  const handleSearchIconClick = async () => {
     if (showSearch && searchQuery.trim()) {
-      searchMenuItems(searchQuery.trim());
+      await searchMenuItems(searchQuery.trim());
+      navigate('/search');
     } else {
       setShowSearch((prev) => !prev);
       if (!showSearch) {

@@ -104,6 +104,30 @@
     background-color: #ff6347;
 }
 
+/* Message sent confirmation styles */
+.message-sent-confirmation {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.checkmark {
+    font-size: 48px;
+    color: #28a745;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.message-sent-confirmation p {
+    margin: 8px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.message-sent-confirmation p:first-of-type {
+    font-weight: 600;
+    color: #28a745;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .contactus-popup-container {
@@ -114,5 +138,13 @@
     
     .contactus-popup-title h2 {
         font-size: 20px;
+    }
+
+    .checkmark {
+        font-size: 40px;
+    }
+
+    .message-sent-confirmation p {
+        font-size: 14px;
     }
 }

@@ -7,6 +7,7 @@ import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Profile from "./pages/Profile/profile";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import SearchResults from "./pages/SearchResults/SearchResults";
 import Footer from "./components/Footer/Footer";
 import LogInPopUp from "./components/LogInPopUP/LogInPopUp";
 import ContactUsPopUp from "./components/ContactUsPopUp/ContactUsPopUp";
@@ -27,6 +28,7 @@ const App = () => {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/search" element={<SearchResults />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
           <Route

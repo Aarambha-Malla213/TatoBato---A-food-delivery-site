@@ -12,6 +12,7 @@ const StoreContextProvider = (props) => {
   const [showContactUs, setShowContactUs] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
@@ -110,9 +111,11 @@ const StoreContextProvider = (props) => {
     if (!query.trim()) {
       setSearchResults([]);
       setIsSearchActive(false);
+      setSearchQuery('');
       return;
     }
     try {
+      setSearchQuery(query);
       const response = await fetch(`${API_BASE_URL}/api/search-menu-items/?q=${encodeURIComponent(query)}`);
       if (!response.ok) throw new Error("Failed to search menu items");
       const data = await response.json();
@@ -120,7 +123,7 @@ const StoreContextProvider = (props) => {
       // Map images for search results also
       const resultsWithImages = data.map(item => ({
         ...item,
-        image: foodImages[item.name] || null,
+        image: foodImages[item.item_name] || null,
       }));
 
       setSearchResults(resultsWithImages);
@@ -135,6 +138,7 @@ const StoreContextProvider = (props) => {
   const clearSearch = () => {
     setSearchResults([]);
     setIsSearchActive(false);
+    setSearchQuery('');
   };
 
   return (
@@ -156,6 +160,7 @@ const StoreContextProvider = (props) => {
         updateUser,
         searchResults,
         isSearchActive,
+        searchQuery,
         searchMenuItems,
         clearSearch,
       }}
