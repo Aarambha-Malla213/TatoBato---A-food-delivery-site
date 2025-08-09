@@ -11,6 +11,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+# Try to import production dependencies, fall back to defaults if not available
+try:
+    from decouple import config
+    import dj_database_url
+    PRODUCTION_READY = True
+except ImportError:
+    # For development when packages aren't installed yet
+    def config(key, default=None, cast=None):
+        if cast and default is not None:
+            return cast(default)
+        return default
+    PRODUCTION_READY = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +34,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j5u9conah(k%64$l28j(=3=%#=5_6jb)plamnsqb9!hwcz)u8+'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-j5u9conah(k%64$l28j(=3=%#=5_6jb)plamnsqb9!hwcz)u8+')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
 
 
 # Application definition
@@ -45,20 +59,31 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+]
+
+# Add WhiteNoise middleware only if available (for production)
+if PRODUCTION_READY:
+    try:
+        import whitenoise
+        MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+    except ImportError:
+        pass
+
+MIDDLEWARE += [
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'tatobato.urls'
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  
-]
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = config('DEBUG', default=True, cast=bool)  # Only allow all origins in development
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173', cast=lambda v: [s.strip() for s in v.split(',')])
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -80,19 +105,27 @@ WSGI_APPLICATION = 'tatobato.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # Your Supabase database name
-        'USER': 'postgres.dvsxuyrmwzqknitfejqu',  # Your Supabase DB user
-        'PASSWORD': 'tatobato@123',  # Replace with your actual password
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host (pooler endpoint)
-        'PORT': '6543',  # Supabase port
-        'OPTIONS': {
-            'sslmode': 'require',  # Supabase requires SSL connections
-        },
+if PRODUCTION_READY:
+    # Use environment variable for database URL in production
+    DATABASE_URL = config('DATABASE_URL', default='postgresql://postgres.dvsxuyrmwzqknitfejqu:tatobato@123@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require')
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
+else:
+    # Use direct configuration for development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',  # Your Supabase database name
+            'USER': 'postgres.dvsxuyrmwzqknitfejqu',  # Your Supabase DB user
+            'PASSWORD': 'tatobato@123',  # Replace with your actual password
+            'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host (pooler endpoint)
+            'PORT': '6543',  # Supabase port
+            'OPTIONS': {
+                'sslmode': 'require',  # Supabase requires SSL connections
+            },
+        }
+    }
 
 
 # Password validation
@@ -129,7 +162,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'home', 'static'),
+]
+
+# WhiteNoise configuration for static files (only works if whitenoise is installed)
+if PRODUCTION_READY:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
