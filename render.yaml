@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: tatobato-backend
+    env: python
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r backend/requirements.txt
+    startCommand: cd backend && gunicorn tatobato.wsgi --log-file -
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tatobato-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        value: "*.onrender.com,localhost,127.0.0.1"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://tatobato-frontend.onrender.com,http://localhost:5173"
+
+  - type: web
+    name: tatobato-frontend
+    env: static
+    buildCommand: cd Frontend && npm install && npm run build
+    staticPublishPath: Frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: "https://tatobato-backend.onrender.com"
