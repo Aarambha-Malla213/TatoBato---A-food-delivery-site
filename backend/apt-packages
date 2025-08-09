@@ -1,1 +1,5 @@
 libpq-dev
+python3-dev
+gcc
+build-essential
+postgresql-server-dev-all
