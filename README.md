@@ -215,4 +215,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 📞 Support
 
-For support, email aarambhamalla213@gmail.com or create an issue in this repository.
+For support, email mallaaarambha213@gmail.com or create an issue in this repository.
