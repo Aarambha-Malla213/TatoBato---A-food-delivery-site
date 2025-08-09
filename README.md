@@ -192,12 +192,14 @@ The application includes:
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 👨‍💻 Author
+## 👨‍💻 Authors
 
-**Aarambha Bom Malla**
-- GitHub: [@Aarambha-Malla213](https://github.com/Aarambha-Malla213)
-**Pranjal Barnwal**
-- Github: [@Pranjal0512](https://github.com/Pranjal0512)
+- **Aarambha Bom Malla**  
+  GitHub: [@Aarambha-Malla213](https://github.com/Aarambha-Malla213)
+
+- **Pranjal Barnwal**  
+  GitHub: [@Pranjal0512](https://github.com/Pranjal0512)
+
 
 ## 🙏 Acknowledgments
 
